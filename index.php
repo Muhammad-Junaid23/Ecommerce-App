@@ -1,5 +1,11 @@
 <?php
+session_start();
 require 'config.php';
+
+if (!isset($_SESSION['user_id'])) {
+    echo "Please login first";
+    exit;
+}
 
 // Fetch products
 $stmt = $pdo->query("SELECT * FROM products");
