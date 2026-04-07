@@ -5,6 +5,7 @@ if($_SERVER["REQUEST_METHOD"]== "POST"){
     $name =$_POST['name'];
     $price =$_POST['price'];
 
+    // add products into db
     $stmt = $pdo->prepare("INSERT INTO products (name,price) VALUES (?,?)");
     $stmt->execute([$name,$price]);
 

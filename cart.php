@@ -11,12 +11,12 @@ if(isset($_POST['product_id'])){
     $_SESSION['cart'][]=$_POST['product_id'];
 }
 
-// fetch products from DB
 
 $cartItems =[];
 
 if(!empty($_SESSION['cart'])){
     $ids = implode(",",$_SESSION['cart']);
+    // fetch products from DB with ids
     $stmt = $pdo->query("SELECT * FROM products WHERE id IN ($ids)");
     $cartItems = $stmt->fetchAll();
 }
