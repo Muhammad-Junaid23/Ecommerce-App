@@ -5,8 +5,9 @@ require 'config.php';
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $name = $_POST['name'];
     $email = $_POST['email'];
+    // hashing password
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
+    // registering user
     $stmt = $pdo->prepare("INSERT INTO users (name,email,password) VALUES (?,?,?)");
     $stmt-> execute([$name,$email,$password]);
 

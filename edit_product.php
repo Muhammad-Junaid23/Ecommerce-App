@@ -3,8 +3,7 @@ require 'config.php';
 
 $id = $_GET['id'];
 
-// fetch product
-
+// fetch product where id
 $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
 $stmt->execute([$id]);
 $product = $stmt->fetch();
@@ -13,6 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $name = $_POST['name'];
     $price = $_POST['price'];
 
+    // updating product
     $stmt = $pdo->prepare("UPDATE products SET name=?, price=? WHERE id=?");
     $stmt->execute([$name,$price,$id]);
 
