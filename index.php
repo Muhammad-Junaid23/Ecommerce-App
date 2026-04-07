@@ -26,6 +26,18 @@ $products = $stmt->fetchAll();
         <h3><?= $product['name'] ?></h3>
         <p><?= $product['description'] ?></p>
         <strong>Price: Rs <?= $product['price'] ?></strong>
+
+    <form method="POST" action="cart.php">
+        <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+        <button>Add to Cart</button>
+    </form>
+
+        <a href="edit_product.php?id=<?= $product['id'] ?>">Edit</a>
+
+    <form method="POST" action="delete_product.php">
+        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+        <button>Delete</button>
+    </form>
     </div>
 <?php endforeach; ?>
 
