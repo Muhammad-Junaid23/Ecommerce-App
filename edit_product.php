@@ -20,8 +20,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 ?>
 
-<form method="POST">
-    <input name="name" value="<?= $product['name'] ?>"><br>
-    <input name="price" value="<?= $product['price'] ?>"><br>
-    <button>Update</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5" style="max-width:500px;">
+    <div class="card p-4 shadow">
+
+        <h3>Edit Product</h3>
+
+        <form method="POST">
+            <input class="form-control mb-3" name="name" value="<?= $product['name'] ?>">
+            <input class="form-control mb-3" name="price" value="<?= $product['price'] ?>">
+            <button class="btn btn-warning">Update</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+
+</html>

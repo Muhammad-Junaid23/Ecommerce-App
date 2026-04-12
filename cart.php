@@ -2,42 +2,22 @@
 session_start();
 require 'config.php';
 
-if(!isset($_SESSION['cart'])){
-    $_SESSION['cart']=[];
-    // $_SESSION['cart'][$id] = quantity;
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
 }
 
-// add product to cart
-if(isset($_POST['product_id'])){
-    $_SESSION['cart'][]=$_POST['product_id'];
-}
-
-
-$cartItems =[];
-
-if (empty($cartItems)) {
-    echo "Your cart is empty";
-}
-
-if(!empty($_SESSION['cart'])){
-    $ids = implode(",",$_SESSION['cart']);
-    // fetch products from DB with ids
-    $stmt = $pdo->query("SELECT * FROM products WHERE id IN ($ids)");
-    $cartItems = $stmt->fetchAll();
-}
-
-// increment cart item
+// ADD / INCREMENT
 if (isset($_POST['product_id'])) {
     $id = $_POST['product_id'];
 
     if (isset($_SESSION['cart'][$id])) {
-        $_SESSION['cart'][$id]++; // increment
+        $_SESSION['cart'][$id]++;
     } else {
-        $_SESSION['cart'][$id] = 1; // new item
+        $_SESSION['cart'][$id] = 1;
     }
 }
 
-// decrement cart item
+// DECREMENT
 if (isset($_POST['decrease_id'])) {
     $id = $_POST['decrease_id'];
 
@@ -48,36 +28,70 @@ if (isset($_POST['decrease_id'])) {
     }
 }
 
-// remove item
+// REMOVE
 if (isset($_POST['remove_id'])) {
     $id = $_POST['remove_id'];
     unset($_SESSION['cart'][$id]);
 }
 
+// FETCH PRODUCTS
+$cartItems = [];
+
+if (!empty($_SESSION['cart'])) {
+    $ids = implode(",", array_keys($_SESSION['cart']));
+    $stmt = $pdo->query("SELECT * FROM products WHERE id IN ($ids)");
+    $cartItems = $stmt->fetchAll();
+}
 ?>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
 <h2>Your Cart</h2>
 
+<?php if (empty($cartItems)): ?>
+    <div class="alert alert-info">Your cart is empty</div>
+<?php endif; ?>
+
 <?php foreach ($cartItems as $item): ?>
-    <div>
-        <h4><?= $item['name'] ?></h4>
-        <p>Rs <?= $item['price'] ?></p>
+    <div class="card mb-3 p-3 d-flex flex-row justify-content-between align-items-center">
 
-        <form method="POST">
-    <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
-    <button>+</button>
-</form>
+        <div>
+            <h5><?= $item['name'] ?></h5>
+            <p>Rs <?= $item['price'] ?></p>
+            <p><strong>Qty: <?= $_SESSION['cart'][$item['id']] ?></strong></p>
+        </div>
 
-<form method="POST">
-    <input type="hidden" name="decrease_id" value="<?= $item['id'] ?>">
-    <button>-</button>
-</form>
+        <div class="d-flex gap-2">
 
-<form method="POST">
-    <input type="hidden" name="remove_id" value="<?= $item['id'] ?>">
-    <button>Remove</button>
-</form>
+            <form method="POST">
+                <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                <button class="btn btn-success">+</button>
+            </form>
 
-<p>Quantity: <?= $_SESSION['cart'][$item['id']] ?></p>
+            <form method="POST">
+                <input type="hidden" name="decrease_id" value="<?= $item['id'] ?>">
+                <button class="btn btn-warning">-</button>
+            </form>
+
+            <form method="POST">
+                <input type="hidden" name="remove_id" value="<?= $item['id'] ?>">
+                <button class="btn btn-danger">Remove</button>
+            </form>
+
+        </div>
+
     </div>
 <?php endforeach; ?>
+
+<a href="index.php" class="btn btn-primary">Back to Products</a>
+
+</div>
+</body>
+</html>
